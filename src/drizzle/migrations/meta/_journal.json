@@ -1,0 +1,41 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1729881981199,
+      "tag": "0000_first_agent_brand",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1729889195798,
+      "tag": "0001_tranquil_la_nuit",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1729891320385,
+      "tag": "0002_abandoned_ma_gnuci",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1729892112866,
+      "tag": "0003_free_network",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1729893577109,
+      "tag": "0004_curly_wallow",
+      "breakpoints": true
+    }
+  ]
+}
