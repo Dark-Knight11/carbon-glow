@@ -1,4 +1,4 @@
-import { DatabaseService } from '@database/database.service';
+import { DatabaseService } from '../database/database.service';
 import {
   ForbiddenException,
   Injectable,
@@ -6,12 +6,11 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { LoginDTO, RegisterDTO } from './auth.dto';
-import { user } from '@drizzle/schema';
+import { user } from '../drizzle/schema';
 import { eq } from 'drizzle-orm';
-import { ApiResponse } from 'src/utils/api-response';
+import { ApiResponse } from '../utils/api-response';
 import argon from 'argon2';
 import { JwtService } from '@nestjs/jwt';
-import { access } from 'fs';
 
 @Injectable()
 export class AuthService {

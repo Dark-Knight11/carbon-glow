@@ -1,8 +1,8 @@
 import { Controller, Get, Request, UseGuards } from '@nestjs/common';
 import { AccountAggregatorService } from './account-aggregator.service';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard } from '../auth/auth.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { ApiResponse } from 'src/utils/api-response';
+import { ApiResponse } from '../utils/api-response';
 
 @ApiTags('Account Aggregator')
 @Controller()

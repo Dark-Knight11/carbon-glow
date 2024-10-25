@@ -1,8 +1,8 @@
-import { DatabaseService } from '@database/database.service';
+import { DatabaseService } from '../database/database.service';
 import { Injectable } from '@nestjs/common';
 import { aaData } from './utils';
-import { transactions } from '@drizzle/schema';
-import { ApiResponse } from 'src/utils/api-response';
+import { transactions } from '../drizzle/schema';
+import { ApiResponse } from '../utils/api-response';
 import { eq } from 'drizzle-orm';
 
 @Injectable()

@@ -1,10 +1,10 @@
-import { DatabaseConfig } from '@database/database-options.interface';
+import { DatabaseConfig } from './database-options.interface';
 import {
   ConfigurableDatabaseModule,
   DATABASE_OPTIONS,
   DB,
-} from '@database/database.module-definition';
-import { DatabaseService } from '@database/database.service';
+} from './database.module-definition';
+import { DatabaseService } from './database.service';
 import { Global, Module } from '@nestjs/common';
 import { Pool } from 'pg';
 

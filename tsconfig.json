@@ -18,10 +18,6 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false,
-    "paths": {
-      "@database/*": ["src/database/*"],
-      "@drizzle/*": ["src/drizzle/*"]
-    }
+    "noFallthroughCasesInSwitch": false
   }
 }

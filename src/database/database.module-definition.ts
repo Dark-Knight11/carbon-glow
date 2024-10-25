@@ -1,4 +1,4 @@
-import { DatabaseConfig } from '@database/database-options.interface';
+import { DatabaseConfig } from './database-options.interface';
 import { ConfigurableModuleBuilder } from '@nestjs/common';
 
 export const DB = 'db';
