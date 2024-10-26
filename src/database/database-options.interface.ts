@@ -1,3 +1,3 @@
 export interface DatabaseConfig {
-    url: string;
-  }
+  url: string;
+}

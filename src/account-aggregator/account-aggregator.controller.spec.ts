@@ -11,7 +11,9 @@ describe('AccountAggregatorController', () => {
       providers: [AccountAggregatorService],
     }).compile();
 
-    controller = module.get<AccountAggregatorController>(AccountAggregatorController);
+    controller = module.get<AccountAggregatorController>(
+      AccountAggregatorController,
+    );
   });
 
   it('should be defined', () => {
