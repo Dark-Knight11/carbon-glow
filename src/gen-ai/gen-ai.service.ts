@@ -1,4 +1,4 @@
-import { GenerativeModel, GoogleGenerativeAI } from '@google/generative-ai';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import { Injectable } from '@nestjs/common';
 import { and, eq, isNotNull } from 'drizzle-orm';
 import { DatabaseService } from '../database/database.service';
@@ -7,11 +7,13 @@ import { transactions } from '../drizzle/schema';
 @Injectable()
 export class GenAiService {
   genAI: GoogleGenerativeAI;
-  model: GenerativeModel;
 
   constructor(private readonly dbService: DatabaseService) {
     this.genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY ?? '');
-    this.model = this.genAI.getGenerativeModel({
+  }
+
+  async getCarbonFootprintOfTransactions(userId: string) {
+    const model = this.genAI.getGenerativeModel({
       model: 'gemini-1.5-pro',
       systemInstruction: `
         Calculate the carbon footprint in kilograms (kg) for each transaction based on the following details. Use the provided variables to calculate the footprint per item, categorize them by 'category', and sum the results for each category.
@@ -88,9 +90,6 @@ export class GenAiService {
     }
   `,
     });
-  }
-
-  async getCarbonFootprint(userId: string) {
     const transactionsData =
       await this.dbService.db.query.transactions.findFirst({
         where: and(
@@ -106,12 +105,67 @@ export class GenAiService {
         item_name: ${transactionsData.item}
         quantity: ${transactionsData.quantity}
     `;
-    console.log('Prompt', prompt);
-    const result = await this.model.generateContent(prompt);
+    const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
 
-    console.log('Response:', text);
+    return JSON.parse(
+      text
+        .trim()
+        .replace(/```json/g, '')
+        .replace(/{ "/g, '')
+        .replace(/```/g, ''),
+    );
+  }
+
+  async getCarbonFootprintOfTransportation(
+    from: string,
+    to: string,
+    distance: number,
+  ) {
+    const model = this.genAI.getGenerativeModel({
+      model: 'gemini-1.5-pro',
+      systemInstruction: `
+         Instructions:
+          1. Distance Calculation:
+            - Use the input distance between Point A and Point B (in kilometers) as provided.
+            
+          2. Emission Factors:
+            - Diesel Car (SUV): Use a standard emission factor (e.g., X kg CO₂ per km).
+            - Petrol Car (SUV): Use a standard emission factor (e.g., Y kg CO₂ per km).
+            - Electric Vehicle (SUV): Use a standard emission factor (e.g., Z kg CO₂ per km).
+            - Electric Train (EMU): Use a standard emission factor (e.g., W kg CO₂ per km).
+
+          3. Carbon Footprint Calculation:
+            - For each transport mode, calculate the carbon footprint as:
+              Carbon Footprint (kg) = Distance × Emission Factor (kg CO₂ per km)
+
+          4. Output Format:
+            - Provide the results in JSON format, with each transport mode’s carbon footprint in kg.
+
+          Expected Output JSON Format:
+          {
+            "carbon_footprint_transport": {
+              "diesel_car_kg_co2": "{{diesel_car_kg_co2}}",
+              "petrol_car_kg_co2": "{{petrol_car_kg_co2}}",
+              "ev_car_kg_co2": "{{ev_car_kg_co2}}",
+              "electric_train_kg_co2": "{{electric_train_kg_co2}}"
+            }
+          }
+          Don't send any explanation and assumptions in response
+  `,
+    });
+
+    const prompt = `
+      Calculate the carbon footprint in kilograms (kg) for the distance traveled between ${from} and ${to}.
+
+      Input Details:
+      - distance_km: ${distance} (the distance between ${from} and ${to} in kilometers)
+`;
+
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = response.text();
 
     return JSON.parse(
       text
