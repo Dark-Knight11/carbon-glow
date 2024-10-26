@@ -33,11 +33,9 @@ export class MfService {
   }
 
   async getMfData(userId: string) {
-    const mfData = await this.dbService.db
+    return await this.dbService.db
       .select()
       .from(mutual_funds)
       .where(eq(mutual_funds.user_id, userId));
-
-    return new ApiResponse(200, mfData);
   }
 }

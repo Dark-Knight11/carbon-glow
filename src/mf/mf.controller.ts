@@ -1,21 +1,26 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
 import { MfService } from './mf.service';
 import { ApiResponse } from '../utils/api-response';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '../auth/auth.guard';
 
-@Controller('mf')
+@Controller()
 @ApiTags('Mutual Funds')
 export class MfController {
   constructor(private readonly mfService: MfService) {}
 
   @Get('api/mf')
-  async getMfData(userId: string) {
-    const data = this.mfService.getMfData(userId);
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
+  async getMfData(@Request() req: any) {
+    const data = await this.mfService.getMfData(req.user.sub);
     return new ApiResponse(200, data);
   }
 
   @Post('api/fetch-mf')
-  async fetchMfData(userId: string) {
-    return this.mfService.fetchMfData(userId);
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
+  async fetchMfData(@Request() req: any) {
+    return this.mfService.fetchMfData(req.user.sub);
   }
 }
