@@ -62,3 +62,33 @@ export const transactions = pgTable(
     unq: unique().on(t.user_id, t.reference),
   }),
 );
+
+export const mutual_funds = pgTable(
+  'mutual_funds',
+  {
+    id: serial('id').primaryKey().notNull(),
+    isin: text('isin').notNull(),
+    user_id: uuid('user_id')
+      .notNull()
+      .references(() => user.id, {
+        onDelete: 'cascade',
+        onUpdate: 'cascade',
+      }),
+    scheme_name: text('scheme_name').notNull(),
+    broker_name: text('broker_name').notNull(),
+    cost_value: doublePrecision('cost_value').notNull(),
+    market_value: doublePrecision('market_value').notNull(),
+    nav: doublePrecision('nav').notNull(),
+    created_at: timestamp('created_at', {
+      withTimezone: true,
+      mode: 'string',
+    }).defaultNow(),
+    updated_at: timestamp('updated_at', {
+      withTimezone: true,
+      mode: 'string',
+    }).defaultNow(),
+  },
+  (t) => ({
+    unq: unique().on(t.user_id, t.isin),
+  }),
+);

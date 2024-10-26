@@ -7,6 +7,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './auth/constants';
+import { GenAiModule } from './gen-ai/gen-ai.module';
+import { MfModule } from './mf/mf.module';
 
 @Module({
   controllers: [AppController],
@@ -28,6 +30,8 @@ import { jwtConstants } from './auth/constants';
     }),
     AuthModule,
     AccountAggregatorModule,
+    GenAiModule,
+    MfModule,
   ],
 })
 export class AppModule {}
